@@ -1,38 +1,126 @@
-.App {
+.App-logo {
+  width: 75px;
+  pointer-events: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.SignIn {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.left-side {
+  background-image: url(../public/imgs/Tel_Aviv.png);
+  background-size: cover;
+  background-position: center;
+  width: 55%;
+  position: relative;
+}
+
+.introductory-text {
+  position: absolute;
+  left: 5%;
+  bottom: 10%;
+}
+
+.introductory-text h1 {
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+
+.right-side {
+  background: linear-gradient(45deg, rgba(0, 51, 102, 1), rgba(15, 82, 186, 1));
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-side h1 {
+  color: white;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.right-side h3 {
+  color: white;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+
+.right-side p {
+  color: darkgrey;
+  font-size: 14px;
+  margin: 20px 0 10px 0;
+}
+
+.title {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.input-boxes {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 15px;
+  width: 75%;
+  margin-bottom: 20px;
+}
+
+.input-boxes input {
+  background-color: #04182E;
+  border: none;
+  border-radius: 5px;
+  width: 90%;
+  height: 50px;
+  padding: 0 20px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.input-boxes input:hover {
+  background-color: #000d1b;
+}
+
+.input-boxes button {
+  background: linear-gradient(159deg, rgba(0, 71, 171, 1) 0%, rgba(28, 169, 201, 1) 100%);
   color: white;
+  border: none;
+  border-radius: 5px;
+  width: 50%;
+  height: 50px;
+  padding: 5px 0;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+.input-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+.input-buttons button {
+  background: linear-gradient(159deg, rgba(0, 71, 171, 1) 0%, rgba(28, 169, 201, 1) 100%);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 25%;
+  height: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
