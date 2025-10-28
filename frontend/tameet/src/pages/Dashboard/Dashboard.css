@@ -1,0 +1,178 @@
+
+/** dashboard styling */
+/** using 8 point grid system (increasing by 8px) */
+
+.dashboard {
+  /** dividing the dashboard into two cells, one for sidebar and one for the rest of 
+  the dashboard */
+  display: grid;
+  /** making the sidebar being 220px wide, while the other cell is the rest of the sceen */
+  grid-template-columns: 220px 1fr;   
+  /** make this element at least as tall as the entire visible screen */    
+  min-height: 100vh;
+  background: #0f1115;
+}
+
+/* sidebar styling */
+.sidebar {
+  /** background color, text, padding from the top*/
+  background: #1f2937;
+  color: #fff;             
+  padding: 20px;                          
+}
+
+/** title of the sidebar */
+.sidebar h2 { 
+  /** removing the defalt top and bottom spacing */ 
+  margin: 0;     
+  font-size: 20px; 
+}
+.sidebar ul { 
+  /** removing the bullets from the list */
+  list-style: none;
+  /** adding 16px of space above the element, and 0px on the sides or bottom */
+  margin: 16px 0 0; 
+  /** removing default padding */
+  padding: 0;
+}
+
+/** list of the sidebar */
+.sidebar li { 
+  padding: 8px 0;
+  color: #cbd5e1; 
+  /** adding the pointer cursor to feel clickable */ 
+  cursor: pointer;
+}
+
+/** brightening the color on hover */
+.sidebar li:hover { 
+  color: #fff; 
+}
+
+/* main component */
+.main {
+  background: #f6f8fb;
+  /* horizontal and bottom padding */
+  padding: 0 12px 24px;
+  /** height is 100% of the screen available */
+  min-height: 100vh;
+}
+
+/* topbar */
+.topbar {
+  /** displaying like a grid with three components */
+  display: grid; 
+  /** centered title, the rest fill out the space */                         
+  grid-template-columns: 1fr auto 1fr;    
+  /** centering items vertically */
+  align-items: center;     
+  /** adding 12px between grid cells */
+  gap: 12px;                             
+  background: #071739; 
+  /** text color */
+  color: #fff;
+  /* inner spacing inside the cells */
+  padding: 14px 18px; 
+  /* softening the edges to make them rounder */          
+  border-radius: 10px;  
+  /* Keep it off the edges of the main area */                  
+  margin: 12px 12px 20px;                 
+}
+
+
+.topbar-left { 
+  /** items are going to be next to eachother instead of horizontally */
+  display: flex; 
+  align-items: center; 
+}
+
+/** tamid logo */
+.brand { 
+  width: 44px; 
+  height: 44px; 
+  /* rounded logo background */
+  border-radius: 10px;  
+  /* soft translucent tile behind the logo */                  
+  background: rgba(255,255,255,0.06); 
+   /* space around the logo image */ 
+  padding: 8px;                          
+}
+
+.topbar-title { 
+  /* remove default h1 margins */
+  margin: 0;                              
+  font-size: 28px; 
+  /* bolding the title */     
+  font-weight: 800;                      
+  text-align: center;                 
+}
+
+.topbar-right { 
+  /** items are going to be next to eachother instead of horizontally */
+  display: flex; 
+  /* push to the right edge */                        
+  justify-content: flex-end;              
+  align-items: center; 
+   /* space between items */
+  gap: 14px;                             
+}
+
+.greeting { 
+  /* bolding it slightly */
+  font-weight: 600;                       
+}
+
+/* icon button wrapping bell image */
+.icon-btn {
+  display: grid;  
+   /* center it horizontally and vertically */           
+  place-items: center;           
+  width: 36px; 
+  height: 36px;
+  /* clear border around bell button */
+  border: 1px solid rgba(255,255,255,0.18);
+  /** rounding it a little */
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06); 
+  color: #fff;
+  /* making the cursor clickable */                              
+  cursor: pointer;                           
+}
+.icon-btn:hover { 
+  /* making it brighter on hover */
+  background: rgba(255,255,255,0.12);      
+}
+
+/* Profile avatar circle */
+.avatar { 
+  width: 38px; 
+  height: 38px; 
+  /* making it a circle */
+  border-radius: 50%;   
+  /* cropping to fill the circle nicely */                   
+  object-fit: cover;  
+  /** outline of the profile */                    
+  border: 2px solid rgba(255,255,255,.35);
+}
+
+/* making the cards of the dashboard */
+.cards {
+  /* space below the topbar */
+  margin-top: 18px; 
+   /* making it a grid for equal-width cards */                      
+  display: grid;  
+  /** making it separate in three columns horizontally */                         
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+   /* space between cards */
+  gap: 16px;                              
+}
+.card {
+   /* white tiles */
+  background: #fff;  
+   /* light border for definition */                     
+  border: 1px solid #e5e7eb;  
+  /* rounded corners */            
+  border-radius: 12px;  
+  /* inner spacing */                   
+  padding: 16px;                        
+}
