@@ -1,6 +1,7 @@
 import React from "react";
 import "./Dashboard.css";
 
+
 // url for the profile picture
 const avatarUrl =
   "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop";
@@ -9,7 +10,7 @@ const avatarUrl =
 const tamidUrl =
   "https://tamidgroup.org/resourcelibrary/wp-content/uploads/sites/57/2023/08/Horizontal-Group-Logo.png";
 
- /** function to define the dashboard component of the page */
+/** function to define the dashboard component of the page */
 export default function Dashboard() {
   return (
     <>
