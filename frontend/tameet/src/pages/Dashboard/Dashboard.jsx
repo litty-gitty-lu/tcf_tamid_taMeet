@@ -9,7 +9,7 @@ const avatarUrl =
 const tamidUrl =
   "https://tamidgroup.org/resourcelibrary/wp-content/uploads/sites/57/2023/08/Horizontal-Group-Logo.png";
 
- /** function to define the dashboard component of the page */
+/** function to define the dashboard component of the page */
 export default function Dashboard() {
   return (
     <>
