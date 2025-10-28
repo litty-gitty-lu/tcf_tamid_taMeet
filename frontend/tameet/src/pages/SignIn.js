@@ -1,8 +1,15 @@
 import logo from '../logo.svg';
 import '../App.css';
+import { useNavigate } from 'react-router-dom';
 
 
 function SignIn() {
+    const navigate = useNavigate();
+
+    const handleSignIn = () => {
+        navigate('/dashboard');
+    };
+
     return (
         <div className="SignIn">
             <div className="left-side">
@@ -22,13 +29,13 @@ function SignIn() {
                 <div className="input-boxes">
                     <input type="text" placeholder="email" />
                     <input type="text" placeholder="password" />
-                    <button>Sign in</button>
+                    <button onClick={handleSignIn}>Sign in</button>
                 </div>
                 <hr></hr>
                 <p>Or continue with</p>
                 <div className="input-buttons">
-                    <button>Google</button>
-                    <button>Northeastern</button>
+                    <button onClick={handleSignIn}>Google</button>
+                    <button onClick={handleSignIn}>Northeastern</button>
                 </div>
             </div>
 
