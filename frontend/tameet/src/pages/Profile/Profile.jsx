@@ -1,131 +1,154 @@
 import React, { useState, useEffect } from "react";
 import "./Profile.css";
 
-
 /**
- * Shows and manages user profile information including personal details,
- * interests, goals, and calendar sync status. Supports view and edit modes.
+ * Profile Component (Frontend Only - No Backend Required)
+ * 
+ * Displays and manages user profile information with view and edit modes.
+ * Uses mock data instead of API calls for testing the UI.
  * 
  * @component
- * @returns {JSX.Element} The rendered profile page
- * 
- * State Properties:
- * @property {string} name  The name of the user
- * @property {string} email The email of the user
- * @property {string} bio The description of the user
- * @property {string[]} interests Interests given by the user
- * @property {string[]} goals Goals given by the user
- * @property {string[]} activityPreferences Activity preferences given by the user
- * @property {boolean} calendarSynced True if calendar is synced, false otherwise
- * @property {string} profilePicture URL to an image of the user
- * @property {number} following The number of users being followed
- * @property {number} followers The number of followers a user has
+ * @returns {JSX.Element} The rendered Profile component
  */
-
 const Profile = () => {
+  /**
+   * Controls whether the profile is in edit mode or view mode
+   * @type {[boolean, Function]}
+   * @default false
+   */
   const [isEditing, setIsEditing] = useState(false);
+
+  /**
+   * Mock profile data - simulates data from a backend API
+   * @typedef {Object} ProfileData
+   * @property {string} name - User's full name
+   * @property {string} email - User's email address
+   * @property {string} bio - User's biography/description
+   * @property {string[]} interests - Array of user interests
+   * @property {string[]} goals - Array of what user wants from coffee chats
+   * @property {string[]} activityPreferences - Preferred meeting types
+   * @property {boolean} calendarSynced - Whether calendar is synced
+   * @property {string} profilePicture - URL to user's profile picture
+   * @property {number} following - Count of users following
+   * @property {number} followers - Count of followers
+   */
   const [profileData, setProfileData] = useState({
-    name: "",
-    email: "",
-    bio: "",
-    interests: [],
-    goals: [],
-    activityPreferences: [],
+    name: "Samantha Rodriguez",
+    email: "samantha@northeastern.edu",
+    bio: "Coffee enthusiast and aspiring entrepreneur. Love connecting with people who are passionate about tech and innovation!",
+    interests: ["Startups", "Coffee", "Tech", "Networking"],
+    goals: [
+      "Learn about product management",
+      "Connect with founders in the Boston area",
+      "Explore career opportunities in tech",
+    ],
+    activityPreferences: ["Coffee", "Lunch", "Virtual"],
     calendarSynced: false,
-    profilePicture: "",
-    following: 0,
-    followers: 0,
+    profilePicture: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop",
+    following: 12,
+    followers: 8,
   });
 
-  const [formData, setFormData] = useState({ ...profileData }); // Creates a copy of the profile (let's you cancel changes)
-  const [newInterest, setNewInterest] = useState(""); // Creates changes in the empty profile
+  /**
+   * Temporary copy of profileData used during editing
+   * @type {[ProfileData, Function]}
+   */
+  const [formData, setFormData] = useState({ ...profileData });
+
+  /**
+   * Temporary storage for new interest being typed
+   * @type {[string, Function]}
+   */
+  const [newInterest, setNewInterest] = useState("");
+
+  /**
+   * Temporary storage for new goal being typed
+   * @type {[string, Function]}
+   */
   const [newGoal, setNewGoal] = useState("");
+
+  /**
+   * Temporary storage for new activity preference being typed
+   * @type {[string, Function]}
+   */
   const [newActivity, setNewActivity] = useState("");
 
-  // Fetch profile data on component mount
+  // Note: No API call needed! Data is already loaded above
   useEffect(() => {
-    fetchProfileData();
-  }, []); // Will run the code and only run once
+    console.log("Profile loaded with mock data");
+  }, []);
 
-  const fetchProfileData = async () => { // Will get the data from the profile
-    try {
-      const response = await fetch("http://localhost:5000/api/profile", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await response.json();
-      setProfileData(data); // updates the profile with the new data
-      setFormData(data);
-    } catch (error) {
-      console.error("Error fetching profile:", error); // will show an error and won't crash the profile
-    }
-  };
-
-  const handleInputChange = (e) => { // handles input changes to different fields
+  /**
+   * Handles input field changes during profile editing
+   * @param {React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>} e - The change event
+   */
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value }); // makes a copy of the data and updates fields
+    setFormData({ ...formData, [name]: value });
   };
 
-  const addItem = (type, value, setter) => { // adds values to the fields in profile
-    if (value.trim()) { // removes spaces before and after (checks if it's empty)
+  /**
+   * Adds a new item to an array field
+   * @param {string} type - The field name ("interests", "goals", or "activityPreferences")
+   * @param {string} value - The value to add
+   * @param {Function} setter - State setter to clear input
+   */
+  const addItem = (type, value, setter) => {
+    if (value.trim()) {
       setFormData({
         ...formData,
-        [type]: [...formData[type], value.trim()], // copies the data then adds the new value to the end of the array
+        [type]: [...formData[type], value.trim()],
       });
-      setter(""); // clears input field so you can keep adding items
+      setter("");
     }
   };
 
-  const removeItem = (type, index) => { // Removes an item from the array
+  /**
+   * Removes an item from an array field by index
+   * @param {string} type - The field name
+   * @param {number} index - The array index to remove
+   */
+  const removeItem = (type, index) => {
     setFormData({
       ...formData,
-      [type]: formData[type].filter((_, i) => i !== index), // creates a new array without the item at an index
+      [type]: formData[type].filter((_, i) => i !== index),
     });
   };
 
-  const handleSave = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        const updatedData = await response.json();
-        setProfileData(updatedData);
-        setIsEditing(false);
-      }
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
+  /**
+   * Saves the edited profile (frontend only - just updates state)
+   */
+  const handleSave = () => {
+    // In frontend-only mode, just update profileData directly
+    setProfileData(formData);
+    setIsEditing(false);
+    console.log("Profile saved (frontend only):", formData);
+    alert("Profile saved successfully! ✅");
   };
 
+  /**
+   * Cancels editing and discards changes
+   */
   const handleCancel = () => {
     setFormData({ ...profileData });
     setIsEditing(false);
   };
 
-  const syncCalendar = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/calendar/sync", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+  /**
+   * Toggles calendar sync status (frontend only)
+   */
+  const syncCalendar = () => {
+    setProfileData({ ...profileData, calendarSynced: true });
+    console.log("Calendar synced (frontend only)");
+    alert("Calendar synced! ✅");
+  };
 
-      if (response.ok) {
-        const data = await response.json();
-        setProfileData({ ...profileData, calendarSynced: true });
-      }
-    } catch (error) {
-      console.error("Error syncing calendar:", error);
-    }
+  /**
+   * Disconnects calendar sync (frontend only)
+   */
+  const unsyncCalendar = () => {
+    setProfileData({ ...profileData, calendarSynced: false });
+    console.log("Calendar unsynced (frontend only)");
   };
 
   return (
@@ -135,10 +158,7 @@ const Profile = () => {
         <div className="profile-header-content">
           <div className="profile-picture-section">
             <img
-              src={
-                profileData.profilePicture ||
-                "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop"
-              }
+              src={profileData.profilePicture}
               alt="Profile"
               className="profile-picture-large"
             />
@@ -360,7 +380,9 @@ const Profile = () => {
               <div className="sync-status synced">
                 <span className="sync-icon">✓</span>
                 <span>Calendar synced</span>
-                <button className="btn-unsync">Disconnect</button>
+                <button className="btn-unsync" onClick={unsyncCalendar}>
+                  Disconnect
+                </button>
               </div>
             ) : (
               <div className="sync-status not-synced">
