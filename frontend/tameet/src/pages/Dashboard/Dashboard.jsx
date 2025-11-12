@@ -1,5 +1,14 @@
 import React from "react";
 import "./Dashboard.css";
+import { useNavigate } from "react-router-dom";
+
+
+export default function Dashboard() {
+  const navigate = useNavigate();
+
+  const handleGoPages = () => {
+    navigate("/profile");
+  };
 
 // url for the profile picture
 const avatarUrl =
@@ -10,7 +19,6 @@ const tamidUrl =
   "https://tamidgroup.org/resourcelibrary/wp-content/uploads/sites/57/2023/08/Horizontal-Group-Logo.png";
 
 /** function to define the dashboard component of the page */
-export default function Dashboard() {
   return (
     <>
       {/** outermost div, contains everything inside the dashboard */}
@@ -22,7 +30,7 @@ export default function Dashboard() {
             {/* creating an unorganized list for the elements in the sidebar*/}
             <li>Dashboard</li>
             <li>Match</li>
-            <li>Profile</li>
+            <li onClick={handleGoPages} className="clickable">Profile</li>
           </ul>
         </aside>
 
