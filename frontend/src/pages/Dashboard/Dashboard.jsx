@@ -25,10 +25,16 @@ export default function Dashboard() {
 
   // Load current and past matches from backend
   const loadMatches = async () => {
-    const current = await apiGet('/matches/current');
-    const past = await apiGet('/matches/past');
-    setCurrentMatches(current);
-    setPastMatches(past);
+    try {
+      const current = await apiGet('/matches/current');
+      const past = await apiGet('/matches/past');
+      setCurrentMatches(current || []);
+      setPastMatches(past || []);
+    } catch (error) {
+      console.error('Error loading matches:', error);
+      setCurrentMatches([]);
+      setPastMatches([]);
+    }
   };
 
   // Navigate to user profile page

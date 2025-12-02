@@ -1,12 +1,14 @@
 """
 Authentication routes - handles user signup and login.
-Simple endpoints that create accounts and log users in.
+Uses JSON database instead of SQL.
 """
 
 from flask import Blueprint, request, jsonify
-from app import db
-from app.models import User
-from app.utils import hash_password, check_password, generate_token
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from json_db import create_user, verify_user, get_user_by_id
+from app.utils import generate_token
 
 # Create a blueprint for auth routes
 bp = Blueprint('auth', __name__)
@@ -18,6 +20,7 @@ def signup():
     Create a new user account.
     Gets email, password, and name from request.
     Creates user, hashes password, and returns token.
+    Automatically matches with Maddie!
     """
     
     # Get data from request
@@ -26,28 +29,27 @@ def signup():
     password = data.get('password')
     name = data.get('name')
     
-    # Hash the password (never store plain text passwords)
-    password_hash = hash_password(password)
+    # Create user (automatically matches with Maddie)
+    new_user = create_user(email, password, name)
     
-    # Create new user
-    new_user = User(
-        email=email,
-        password_hash=password_hash,
-        name=name,
-        bio='',
-        profile_picture=None
-    )
-    
-    # Save to database
-    db.session.add(new_user)
-    db.session.commit()
+    if not new_user:
+        return jsonify({'error': 'User already exists'}), 400
     
     # Generate token for authentication
-    token = generate_token(new_user.id)
+    token = generate_token(new_user['id'])
     
     # Return user data and token
+    user_dict = {
+        'id': new_user['id'],
+        'email': new_user['email'],
+        'name': new_user['name'],
+        'bio': new_user.get('bio', ''),
+        'profile_picture': new_user.get('profile_picture'),
+        'interests': []
+    }
+    
     return jsonify({
-        'user': new_user.to_dict(),
+        'user': user_dict,
         'token': token
     }), 201
 
@@ -65,18 +67,27 @@ def login():
     email = data.get('email')
     password = data.get('password')
     
-    # Find user by email
-    user = User.query.filter_by(email=email).first()
+    # Verify user
+    user = verify_user(email, password)
     
-    # Check if user exists and password matches
-    if not user or not check_password(password, user.password_hash):
+    if not user:
         return jsonify({'error': 'Invalid email or password'}), 401
     
     # Generate token
-    token = generate_token(user.id)
+    token = generate_token(user['id'])
     
     # Return user data and token
+    from json_db import get_user_interests
+    user_dict = {
+        'id': user['id'],
+        'email': user['email'],
+        'name': user['name'],
+        'bio': user.get('bio', ''),
+        'profile_picture': user.get('profile_picture'),
+        'interests': get_user_interests(user['id'])
+    }
+    
     return jsonify({
-        'user': user.to_dict(),
+        'user': user_dict,
         'token': token
     }), 200

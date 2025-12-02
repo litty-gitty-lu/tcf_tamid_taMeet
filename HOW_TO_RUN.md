@@ -12,7 +12,7 @@ pip install -r requirements.txt
 python run.py
 ```
 
-**Wait for:** `Running on http://0.0.0.0:5000`
+**Wait for:** `Running on http://0.0.0.0:5001`
 
 **Keep this terminal open!**
 
@@ -39,7 +39,7 @@ npm start
 ## That's It!
 
 Both servers must be running:
-- Backend: `http://localhost:5000`
+- Backend: `http://localhost:5001`
 - Frontend: `http://localhost:3000`
 
 ## Troubleshooting

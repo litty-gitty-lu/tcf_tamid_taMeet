@@ -30,9 +30,33 @@ const Profile = () => {
   }, []);
 
   const fetchProfileData = async () => {
-    const data = await apiGet('/profile');
-    setProfileData(data);
-    setFormData(data);
+    try {
+      const data = await apiGet('/profile');
+      // Ensure all required fields exist with defaults
+      setProfileData({
+        ...profileData,
+        ...data,
+        interests: data.interests || [],
+        goals: data.goals || ["Building meaningful connections", "Learning from diverse perspectives"],
+        activityPreferences: data.activityPreferences || ["Coffee", "Lunch", "Virtual"],
+        following: data.following || 0,
+        followers: data.followers || 0,
+        slackSynced: data.slackSynced || false,
+      });
+      setFormData({
+        ...profileData,
+        ...data,
+        interests: data.interests || [],
+        goals: data.goals || ["Building meaningful connections", "Learning from diverse perspectives"],
+        activityPreferences: data.activityPreferences || ["Coffee", "Lunch", "Virtual"],
+        following: data.following || 0,
+        followers: data.followers || 0,
+        slackSynced: data.slackSynced || false,
+      });
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      // Keep default hardcoded data if API fails
+    }
   };
 
   const handleInputChange = (e) => {
@@ -213,7 +237,7 @@ const Profile = () => {
         <div className="profile-section">
           <h2 className="section-title">Interests</h2>
           <div className="tags-container">
-            {formData.interests.map((interest, index) => (
+            {(formData.interests || []).map((interest, index) => (
               <div key={index} className="tag">
                 {interest}
                 {isEditing && (
@@ -256,7 +280,7 @@ const Profile = () => {
         <div className="profile-section">
           <h2 className="section-title">What I'm Looking For</h2>
           <ul className="goals-list">
-            {formData.goals.map((goal, index) => (
+            {(formData.goals || []).map((goal, index) => (
               <li key={index} className="goal-item">
                 {goal}
                 {isEditing && (
@@ -296,7 +320,7 @@ const Profile = () => {
         <div className="profile-section">
           <h2 className="section-title">Activity Preferences</h2>
           <div className="tags-container">
-            {formData.activityPreferences.map((activity, index) => (
+            {(formData.activityPreferences || []).map((activity, index) => (
               <div key={index} className="tag tag-activity">
                 {activity}
                 {isEditing && (

@@ -95,12 +95,7 @@ def require_auth(f):
     """
     Decorator function that requires authentication.
     Use this on any route that needs the user to be logged in.
-    
-    Example:
-        @require_auth
-        def get_profile():
-            # This function will only run if user is authenticated
-            ...
+    Works with JSON database.
     """
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -123,8 +118,13 @@ def require_auth(f):
         if not user_id:
             return jsonify({'error': 'Invalid or expired token'}), 401
         
-        # Get the user from database
-        user = User.query.get(user_id)
+        # Get the user from JSON database
+        import sys
+        import os
+        sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from json_db import get_user_by_id
+        
+        user = get_user_by_id(user_id)
         
         if not user:
             return jsonify({'error': 'User not found'}), 401

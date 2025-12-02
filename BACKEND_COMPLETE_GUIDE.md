@@ -711,13 +711,13 @@ curl http://localhost:5000/api/profile \
 
 ## Security Best Practices (Current Implementation)
 
-✅ **Good:**
+**Good:**
 - Passwords are hashed (bcrypt)
 - JWT tokens expire (7 days)
 - CORS is configured
 - SQL injection prevented (SQLAlchemy)
 
-⚠️ **For Production:**
+**For Production:**
 - Use environment variables for SECRET_KEY
 - Use HTTPS (not HTTP)
 - Add rate limiting
@@ -794,7 +794,7 @@ backend/tameet.db
 
 ---
 
-**You now understand the entire backend!** 🎉
+**You now understand the entire backend!**
 
 This is a solid foundation. Practice by modifying code, adding features, and testing everything. The more you experiment, the more expert you'll become!
 

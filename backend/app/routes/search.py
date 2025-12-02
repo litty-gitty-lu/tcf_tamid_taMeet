@@ -1,13 +1,17 @@
 """
 Search routes - handles user search and follow functionality.
-Simple endpoints to search users and follow/unfollow them.
+Uses JSON database.
 """
 
 from flask import Blueprint, request, jsonify
-from app import db
-from app.models import User, Follow
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from json_db import (
+    get_all_users, get_user_by_id, follow_user, unfollow_user,
+    is_following, get_follower_count, get_following_count, get_user_interests
+)
 from app.utils import require_auth
-from sqlalchemy import or_, and_
 
 # Create a blueprint for search routes
 bp = Blueprint('search', __name__)
@@ -25,45 +29,34 @@ def search_users():
     current_user = request.current_user
     
     # Get search query from URL
-    query = request.args.get('q', '')
+    query = request.args.get('q', '').lower()
     
-    # If no query, return all users except current user
-    if not query:
-        users = User.query.filter(User.id != current_user.id).all()
+    # Get all users except current user
+    all_users = get_all_users(except_user_id=current_user['id'])
+    
+    # Filter by query if provided
+    if query:
+        users = [
+            u for u in all_users
+            if query in u['name'].lower() or query in u['email'].lower()
+        ]
     else:
-        # Search in name and email
-        search_pattern = f'%{query}%'
-        users = User.query.filter(
-            and_(
-                User.id != current_user.id,
-                or_(
-                    User.name.ilike(search_pattern),
-                    User.email.ilike(search_pattern)
-                )
-            )
-        ).all()
+        users = all_users
     
     # Build list of users
     users_list = []
     
     for user in users:
-        user_data = user.to_dict()
-        
-        # Check if current user is following this user
-        follow = Follow.query.filter_by(
-            follower_id=current_user.id,
-            followed_id=user.id
-        ).first()
-        
-        user_data['is_following'] = follow is not None
-        
-        # Get follower/following counts
-        follower_count = Follow.query.filter_by(followed_id=user.id).count()
-        following_count = Follow.query.filter_by(follower_id=user.id).count()
-        
-        user_data['followers'] = follower_count
-        user_data['following'] = following_count
-        
+        user_data = {
+            'id': user['id'],
+            'email': user['email'],
+            'name': user['name'],
+            'bio': user.get('bio', ''),
+            'profile_picture': user.get('profile_picture'),
+            'is_following': is_following(current_user['id'], user['id']),
+            'followers': get_follower_count(user['id']),
+            'following': get_following_count(user['id'])
+        }
         users_list.append(user_data)
     
     return jsonify(users_list), 200
@@ -71,7 +64,7 @@ def search_users():
 
 @bp.route('/follow', methods=['POST'])
 @require_auth
-def follow_user():
+def follow_user_route():
     """
     Follow a user.
     Creates a follow relationship.
@@ -85,21 +78,14 @@ def follow_user():
     user_id = data.get('user_id')
     
     # Create follow relationship
-    new_follow = Follow(
-        follower_id=current_user.id,
-        followed_id=user_id
-    )
-    
-    # Save to database
-    db.session.add(new_follow)
-    db.session.commit()
+    follow_user(current_user['id'], user_id)
     
     return jsonify({'message': 'User followed'}), 201
 
 
 @bp.route('/unfollow', methods=['POST'])
 @require_auth
-def unfollow_user():
+def unfollow_user_route():
     """
     Unfollow a user.
     Deletes the follow relationship.
@@ -112,14 +98,8 @@ def unfollow_user():
     data = request.get_json()
     user_id = data.get('user_id')
     
-    # Find and delete follow relationship
-    follow = Follow.query.filter_by(
-        follower_id=current_user.id,
-        followed_id=user_id
-    ).first()
-    
-    db.session.delete(follow)
-    db.session.commit()
+    # Remove follow relationship
+    unfollow_user(current_user['id'], user_id)
     
     return jsonify({'message': 'User unfollowed'}), 200
 
@@ -135,32 +115,26 @@ def get_user_profile(user_id):
     current_user = request.current_user
     
     # Get the user
-    user = User.query.get(user_id)
+    user = get_user_by_id(user_id)
     
     # Check if user exists
     if not user:
         return jsonify({'error': 'User not found'}), 404
     
-    # Get user data
-    user_data = user.to_dict()
-    
     # Get interests
-    interests = [interest.interest_name for interest in user.interests]
-    user_data['interests'] = interests
+    interests = get_user_interests(user_id)
     
-    # Check if current user is following this user
-    follow = Follow.query.filter_by(
-        follower_id=current_user.id,
-        followed_id=user_id
-    ).first()
-    
-    user_data['is_following'] = follow is not None
-    
-    # Get follower/following counts
-    follower_count = Follow.query.filter_by(followed_id=user_id).count()
-    following_count = Follow.query.filter_by(follower_id=user_id).count()
-    
-    user_data['followers'] = follower_count
-    user_data['following'] = following_count
+    # Get user data
+    user_data = {
+        'id': user['id'],
+        'email': user['email'],
+        'name': user['name'],
+        'bio': user.get('bio', ''),
+        'profile_picture': user.get('profile_picture'),
+        'interests': interests,
+        'is_following': is_following(current_user['id'], user_id),
+        'followers': get_follower_count(user_id),
+        'following': get_following_count(user_id)
+    }
     
     return jsonify(user_data), 200

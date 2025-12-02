@@ -1,0 +1,201 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "maddie.cush@northeastern.edu",
+      "password_hash": "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYqJ5q5q5qG",
+      "name": "Maddie Cush",
+      "bio": "Business student passionate about entrepreneurship and venture capital. Love connecting with ambitious people and sharing ideas!",
+      "profile_picture": "/imgs/maddie.jpeg",
+      "created_at": "2024-01-01T00:00:00"
+    },
+    {
+      "id": 2,
+      "email": "catherine.ehrling@northeastern.edu",
+      "password_hash": "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYqJ5q5q5qG",
+      "name": "Catherine Ehrling",
+      "bio": "Software engineer interested in AI and machine learning. Always excited to discuss tech trends and career growth!",
+      "profile_picture": "/imgs/cat.jpeg",
+      "created_at": "2024-01-01T00:00:00"
+    },
+    {
+      "id": 3,
+      "email": "druv.robinson@northeastern.edu",
+      "password_hash": "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYqJ5q5q5qG",
+      "name": "Druv Robinson",
+      "bio": "Full-stack developer and startup enthusiast. Passionate about building products and connecting with fellow entrepreneurs.",
+      "profile_picture": "/imgs/druv.jpeg",
+      "created_at": "2024-01-01T00:00:00"
+    },
+    {
+      "id": 4,
+      "email": "charles.adams@northeastern.edu",
+      "password_hash": "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYqJ5q5q5qG",
+      "name": "Charles Adams",
+      "bio": "Data scientist working on healthcare applications. Interested in social impact, innovation, and meaningful conversations.",
+      "profile_picture": "/imgs/charles.jpeg",
+      "created_at": "2024-01-01T00:00:00"
+    },
+    {
+      "id": 5,
+      "email": "ariadna.collbech@northeastern.edu",
+      "password_hash": "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYqJ5q5q5qG",
+      "name": "Ariadna Collbech",
+      "bio": "Product designer with a passion for UX/UI and creative problem-solving. Love connecting with creative minds and tech enthusiasts.",
+      "profile_picture": "/imgs/ariadna.jpeg",
+      "created_at": "2024-01-01T00:00:00"
+    },
+    {
+      "id": 6,
+      "email": "jjjj@hggg",
+      "password_hash": "$2b$12$MIoCwK4uPPuUCBzaoh35eettDDm6iSnYy8YC.fIzK5Bo3ZiUu7y4C",
+      "name": "issa",
+      "bio": "",
+      "profile_picture": null,
+      "created_at": "2025-12-02T21:37:51.901062"
+    },
+    {
+      "id": 7,
+      "email": "kwkwkwkiwik@jjj",
+      "password_hash": "$2b$12$cLBQ3sSXOwN/LcKo69aX5ujM6V8Ltwr9F2RDs72NVSiGGHb76bLZS",
+      "name": "jjjj",
+      "bio": "hhhhgh",
+      "profile_picture": null,
+      "created_at": "2025-12-02T21:45:46.057222"
+    }
+  ],
+  "interests": [
+    {
+      "user_id": 1,
+      "interest_name": "Business"
+    },
+    {
+      "user_id": 1,
+      "interest_name": "VC"
+    },
+    {
+      "user_id": 1,
+      "interest_name": "Entrepreneurship"
+    },
+    {
+      "user_id": 1,
+      "interest_name": "Networking"
+    },
+    {
+      "user_id": 2,
+      "interest_name": "AI/ML"
+    },
+    {
+      "user_id": 2,
+      "interest_name": "Tech"
+    },
+    {
+      "user_id": 2,
+      "interest_name": "Startups"
+    },
+    {
+      "user_id": 2,
+      "interest_name": "Innovation"
+    },
+    {
+      "user_id": 3,
+      "interest_name": "Full-stack"
+    },
+    {
+      "user_id": 3,
+      "interest_name": "Startups"
+    },
+    {
+      "user_id": 3,
+      "interest_name": "React"
+    },
+    {
+      "user_id": 3,
+      "interest_name": "Product"
+    },
+    {
+      "user_id": 4,
+      "interest_name": "Data Science"
+    },
+    {
+      "user_id": 4,
+      "interest_name": "Healthcare"
+    },
+    {
+      "user_id": 4,
+      "interest_name": "Social Impact"
+    },
+    {
+      "user_id": 4,
+      "interest_name": "Python"
+    },
+    {
+      "user_id": 5,
+      "interest_name": "Design"
+    },
+    {
+      "user_id": 5,
+      "interest_name": "UX/UI"
+    },
+    {
+      "user_id": 5,
+      "interest_name": "Product"
+    },
+    {
+      "user_id": 5,
+      "interest_name": "Creative"
+    },
+    {
+      "user_id": 7,
+      "interest_name": "Software Engineering"
+    },
+    {
+      "user_id": 7,
+      "interest_name": "Finance"
+    }
+  ],
+  "matches": [
+    {
+      "id": 1,
+      "user1_id": 1,
+      "user2_id": 2,
+      "user1_accepted": true,
+      "user2_accepted": true,
+      "match_score": 0,
+      "is_active": false,
+      "created_at": "2025-12-02T21:37:12.236059",
+      "archived_at": "2025-12-02T21:37:26.514125"
+    },
+    {
+      "id": 2,
+      "user1_id": 1,
+      "user2_id": 6,
+      "user1_accepted": true,
+      "user2_accepted": true,
+      "match_score": 95,
+      "is_active": true,
+      "created_at": "2025-12-02T21:37:51.901599",
+      "archived_at": null
+    },
+    {
+      "id": 3,
+      "user1_id": 1,
+      "user2_id": 7,
+      "user1_accepted": true,
+      "user2_accepted": true,
+      "match_score": 95,
+      "is_active": false,
+      "created_at": "2025-12-02T21:45:46.057991",
+      "archived_at": "2025-12-02T21:46:24.792292"
+    }
+  ],
+  "follows": [
+    {
+      "id": 1,
+      "follower_id": 7,
+      "followed_id": 2,
+      "created_at": "2025-12-02T21:46:44.944215"
+    }
+  ],
+  "notes": []
+}

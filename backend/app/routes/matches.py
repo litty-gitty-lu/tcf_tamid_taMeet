@@ -1,14 +1,17 @@
 """
 Match routes - handles matching functionality.
-Simple endpoints to find matches, accept/decline, and view matches.
+Uses JSON database.
 """
 
 from flask import Blueprint, request, jsonify
-from app import db
-from app.models import User, Match
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from json_db import (
+    get_user_by_id, get_all_users, get_user_matches, 
+    create_match, archive_match, get_user_interests
+)
 from app.utils import require_auth
-from sqlalchemy import and_, or_
-from datetime import datetime
 
 # Create a blueprint for match routes
 bp = Blueprint('matches', __name__)
@@ -21,14 +24,13 @@ def calculate_match_score(user1, user2):
     """
     
     # Get interests for both users
-    user1_interests = set([interest.interest_name for interest in user1.interests])
-    user2_interests = set([interest.interest_name for interest in user2.interests])
+    user1_interests = set(get_user_interests(user1['id']))
+    user2_interests = set(get_user_interests(user2['id']))
     
     # Find shared interests
     shared_interests = user1_interests.intersection(user2_interests)
     
     # Calculate score based on shared interests
-    # Use the user with fewer interests as the base
     if len(user1_interests) <= len(user2_interests):
         base_count = len(user1_interests)
     else:
@@ -55,26 +57,21 @@ def find_match():
     current_user = request.current_user
     
     # Get all users except current user
-    all_users = User.query.filter(User.id != current_user.id).all()
+    all_users = get_all_users(except_user_id=current_user['id'])
     
-    # Get all existing matches
-    existing_matches = Match.query.filter(
-        or_(
-            Match.user1_id == current_user.id,
-            Match.user2_id == current_user.id
-        )
-    ).all()
+    # Get existing matches
+    existing_matches = get_user_matches(current_user['id'], active_only=True)
     
     # Get IDs of users we've already matched with
     matched_user_ids = set()
     for match in existing_matches:
-        if match.user1_id == current_user.id:
-            matched_user_ids.add(match.user2_id)
+        if match['user1_id'] == current_user['id']:
+            matched_user_ids.add(match['user2_id'])
         else:
-            matched_user_ids.add(match.user1_id)
+            matched_user_ids.add(match['user1_id'])
     
     # Filter out users we've already matched with
-    available_users = [user for user in all_users if user.id not in matched_user_ids]
+    available_users = [user for user in all_users if user['id'] not in matched_user_ids]
     
     # Check if there are any available users
     if not available_users:
@@ -96,8 +93,14 @@ def find_match():
         best_score = calculate_match_score(current_user, best_match)
     
     # Return matched user data
-    match_data = best_match.to_dict()
-    match_data['match_score'] = best_score
+    match_data = {
+        'id': best_match['id'],
+        'email': best_match['email'],
+        'name': best_match['name'],
+        'bio': best_match.get('bio', ''),
+        'profile_picture': best_match.get('profile_picture'),
+        'match_score': best_score
+    }
     
     return jsonify(match_data), 200
 
@@ -118,29 +121,10 @@ def accept_match():
     matched_user_id = data.get('user_id')
     match_score = data.get('match_score', 0)
     
-    # Create match (always put smaller ID as user1 to avoid duplicates)
-    if current_user.id < matched_user_id:
-        user1_id = current_user.id
-        user2_id = matched_user_id
-    else:
-        user1_id = matched_user_id
-        user2_id = current_user.id
+    # Create match
+    new_match = create_match(current_user['id'], matched_user_id, match_score)
     
-    # Create new match
-    new_match = Match(
-        user1_id=user1_id,
-        user2_id=user2_id,
-        user1_accepted=True if user1_id == current_user.id else False,
-        user2_accepted=True if user2_id == current_user.id else False,
-        match_score=match_score,
-        is_active=True
-    )
-    
-    # Save to database
-    db.session.add(new_match)
-    db.session.commit()
-    
-    return jsonify({'match_id': new_match.id}), 201
+    return jsonify({'match_id': new_match['id']}), 201
 
 
 @bp.route('/decline', methods=['POST'])
@@ -151,7 +135,6 @@ def decline_match():
     Just returns success - we don't store declined matches.
     """
     
-    # Just return success
     return jsonify({'message': 'Match declined'}), 200
 
 
@@ -166,64 +149,52 @@ def get_current_matches():
     current_user = request.current_user
     
     # Get all active matches
-    matches = Match.query.filter(
-        and_(
-            or_(
-                Match.user1_id == current_user.id,
-                Match.user2_id == current_user.id
-            ),
-            Match.is_active == True
-        )
-    ).all()
+    matches = get_user_matches(current_user['id'], active_only=True)
     
     # Build list of matches
     matches_list = []
     
     for match in matches:
         # Get the other user in the match
-        if match.user1_id == current_user.id:
-            other_user = User.query.get(match.user2_id)
+        if match['user1_id'] == current_user['id']:
+            other_user = get_user_by_id(match['user2_id'])
         else:
-            other_user = User.query.get(match.user1_id)
+            other_user = get_user_by_id(match['user1_id'])
         
-        # Add match data
-        match_data = other_user.to_dict()
-        match_data['match_id'] = match.id
-        match_data['match_score'] = match.match_score
-        match_data['match_date'] = match.created_at.isoformat()
-        match_data['scheduled'] = False
-        matches_list.append(match_data)
+        if other_user:
+            # Add match data
+            match_data = {
+                'id': other_user['id'],
+                'email': other_user['email'],
+                'name': other_user['name'],
+                'bio': other_user.get('bio', ''),
+                'profile_picture': other_user.get('profile_picture'),
+                'match_id': match['id'],
+                'match_score': match.get('match_score', 0),
+                'match_date': match.get('created_at', ''),
+                'scheduled': False
+            }
+            matches_list.append(match_data)
     
     return jsonify(matches_list), 200
 
 
 @bp.route('/archive', methods=['POST'])
 @require_auth
-def archive_match():
+def archive_match_route():
     """
     Archive a match (move to past matches).
     """
-    
-    # Get current user
-    current_user = request.current_user
     
     # Get match ID from request
     data = request.get_json()
     match_id = data.get('match_id')
     
-    # Find the match
-    match = Match.query.get(match_id)
+    # Archive it
+    match = archive_match(match_id)
     
-    # Check if match exists
     if not match:
         return jsonify({'error': 'Match not found'}), 404
-    
-    # Archive it
-    match.is_active = False
-    match.archived_at = datetime.utcnow()
-    
-    # Save changes
-    db.session.commit()
     
     return jsonify({'message': 'Match archived'}), 200
 
@@ -239,30 +210,32 @@ def get_past_matches():
     current_user = request.current_user
     
     # Get all archived matches
-    matches = Match.query.filter(
-        and_(
-            or_(
-                Match.user1_id == current_user.id,
-                Match.user2_id == current_user.id
-            ),
-            Match.is_active == False
-        )
-    ).all()
+    matches = get_user_matches(current_user['id'], active_only=False)
+    
+    # Filter for archived only
+    archived_matches = [m for m in matches if not m.get('is_active', True)]
     
     # Build list of matches
     matches_list = []
     
-    for match in matches:
+    for match in archived_matches:
         # Get the other user
-        if match.user1_id == current_user.id:
-            other_user = User.query.get(match.user2_id)
+        if match['user1_id'] == current_user['id']:
+            other_user = get_user_by_id(match['user2_id'])
         else:
-            other_user = User.query.get(match.user1_id)
+            other_user = get_user_by_id(match['user1_id'])
         
-        # Add match data
-        match_data = other_user.to_dict()
-        match_data['match_id'] = match.id
-        match_data['archived_date'] = match.archived_at.isoformat() if match.archived_at else None
-        matches_list.append(match_data)
+        if other_user:
+            # Add match data
+            match_data = {
+                'id': other_user['id'],
+                'email': other_user['email'],
+                'name': other_user['name'],
+                'bio': other_user.get('bio', ''),
+                'profile_picture': other_user.get('profile_picture'),
+                'match_id': match['id'],
+                'archived_date': match.get('archived_at', '')
+            }
+            matches_list.append(match_data)
     
     return jsonify(matches_list), 200

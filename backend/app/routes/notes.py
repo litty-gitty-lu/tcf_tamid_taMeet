@@ -1,11 +1,13 @@
 """
 Match notes routes - handles notes about matches.
-Simple endpoints to add, view, and update notes.
+Uses JSON database.
 """
 
 from flask import Blueprint, request, jsonify
-from app import db
-from app.models import Match, MatchNote
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from json_db import get_match_note, save_match_note, delete_match_note
 from app.utils import require_auth
 
 # Create a blueprint for notes routes
@@ -24,14 +26,11 @@ def get_match_notes(match_id):
     current_user = request.current_user
     
     # Find note for this match and user
-    note = MatchNote.query.filter_by(
-        match_id=match_id,
-        user_id=current_user.id
-    ).first()
+    note = get_match_note(match_id, current_user['id'])
     
     # Return note text or empty string
     if note:
-        return jsonify({'note': note.note_text}), 200
+        return jsonify({'note': note['note_text']}), 200
     else:
         return jsonify({'note': ''}), 200
 
@@ -51,32 +50,15 @@ def create_or_update_match_note(match_id):
     data = request.get_json()
     note_text = data.get('note', '')
     
-    # Find existing note
-    existing_note = MatchNote.query.filter_by(
-        match_id=match_id,
-        user_id=current_user.id
-    ).first()
-    
-    if existing_note:
-        # Update existing note
-        existing_note.note_text = note_text
-        db.session.commit()
-    else:
-        # Create new note
-        new_note = MatchNote(
-            match_id=match_id,
-            user_id=current_user.id,
-            note_text=note_text
-        )
-        db.session.add(new_note)
-        db.session.commit()
+    # Save note
+    save_match_note(match_id, current_user['id'], note_text)
     
     return jsonify({'message': 'Note saved'}), 200
 
 
 @bp.route('/match/<int:match_id>', methods=['DELETE'])
 @require_auth
-def delete_match_note(match_id):
+def delete_match_note_route(match_id):
     """
     Delete a note for a match.
     """
@@ -84,18 +66,7 @@ def delete_match_note(match_id):
     # Get current user
     current_user = request.current_user
     
-    # Find the note
-    note = MatchNote.query.filter_by(
-        match_id=match_id,
-        user_id=current_user.id
-    ).first()
-    
-    # Check if note exists
-    if not note:
-        return jsonify({'error': 'Note not found'}), 404
-    
     # Delete the note
-    db.session.delete(note)
-    db.session.commit()
+    delete_match_note(match_id, current_user['id'])
     
     return jsonify({'message': 'Note deleted'}), 200

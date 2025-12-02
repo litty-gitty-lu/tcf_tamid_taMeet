@@ -1,11 +1,13 @@
 """
 Profile routes - handles user profile operations.
-Simple endpoints to view and update profiles.
+Uses JSON database.
 """
 
 from flask import Blueprint, request, jsonify
-from app import db
-from app.models import User, UserInterest
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from json_db import get_user_by_id, update_user, get_user_interests, set_user_interests
 from app.utils import require_auth
 
 # Create a blueprint for profile routes
@@ -24,11 +26,22 @@ def get_profile():
     user = request.current_user
     
     # Get user's interests
-    interests = [interest.interest_name for interest in user.interests]
+    interests = get_user_interests(user['id'])
     
     # Return user data
-    user_data = user.to_dict()
-    user_data['interests'] = interests
+    user_data = {
+        'id': user['id'],
+        'email': user['email'],
+        'name': user['name'],
+        'bio': user.get('bio', ''),
+        'profile_picture': user.get('profile_picture'),
+        'interests': interests,
+        'goals': [],
+        'activityPreferences': [],
+        'following': 0,
+        'followers': 0,
+        'slackSynced': False
+    }
     
     return jsonify(user_data), 200
 
@@ -47,40 +60,36 @@ def update_profile():
     # Get data from request
     data = request.get_json()
     
-    # Update name if provided
+    # Prepare update data
+    update_data = {}
     if 'name' in data:
-        user.name = data['name']
-    
-    # Update bio if provided
+        update_data['name'] = data['name']
     if 'bio' in data:
-        user.bio = data['bio']
-    
-    # Update profile picture if provided
+        update_data['bio'] = data['bio']
     if 'profile_picture' in data:
-        user.profile_picture = data['profile_picture']
+        update_data['profile_picture'] = data['profile_picture']
+    
+    # Update user
+    if update_data:
+        update_user(user['id'], **update_data)
     
     # Update interests if provided
     if 'interests' in data:
-        # Delete old interests
-        UserInterest.query.filter_by(user_id=user.id).delete()
-        
-        # Add new interests
-        for interest_name in data['interests']:
-            new_interest = UserInterest(
-                user_id=user.id,
-                interest_name=interest_name
-            )
-            db.session.add(new_interest)
+        set_user_interests(user['id'], data['interests'])
     
-    # Save changes
-    db.session.commit()
-    
-    # Get updated interests
-    interests = [interest.interest_name for interest in user.interests]
+    # Get updated user
+    updated_user = get_user_by_id(user['id'])
+    interests = get_user_interests(user['id'])
     
     # Return updated user data
-    user_data = user.to_dict()
-    user_data['interests'] = interests
+    user_data = {
+        'id': updated_user['id'],
+        'email': updated_user['email'],
+        'name': updated_user['name'],
+        'bio': updated_user.get('bio', ''),
+        'profile_picture': updated_user.get('profile_picture'),
+        'interests': interests
+    }
     
     return jsonify(user_data), 200
 
@@ -99,33 +108,34 @@ def complete_onboarding():
     # Get data from request
     data = request.get_json()
     
-    # Update name
-    user.name = data.get('name', user.name)
+    # Update user
+    update_data = {}
+    if 'name' in data:
+        update_data['name'] = data.get('name', user['name'])
+    if 'bio' in data:
+        update_data['bio'] = data.get('bio', '')
+    if 'profile_picture' in data:
+        update_data['profile_picture'] = data.get('profile_picture')
     
-    # Update bio
-    user.bio = data.get('bio', '')
-    
-    # Update profile picture
-    user.profile_picture = data.get('profile_picture', None)
+    if update_data:
+        update_user(user['id'], **update_data)
     
     # Update interests
-    UserInterest.query.filter_by(user_id=user.id).delete()
+    if 'interests' in data:
+        set_user_interests(user['id'], data.get('interests', []))
     
-    for interest_name in data.get('interests', []):
-        new_interest = UserInterest(
-            user_id=user.id,
-            interest_name=interest_name
-        )
-        db.session.add(new_interest)
-    
-    # Save changes
-    db.session.commit()
-    
-    # Get updated interests
-    interests = [interest.interest_name for interest in user.interests]
+    # Get updated user
+    updated_user = get_user_by_id(user['id'])
+    interests = get_user_interests(user['id'])
     
     # Return updated user data
-    user_data = user.to_dict()
-    user_data['interests'] = interests
+    user_data = {
+        'id': updated_user['id'],
+        'email': updated_user['email'],
+        'name': updated_user['name'],
+        'bio': updated_user.get('bio', ''),
+        'profile_picture': updated_user.get('profile_picture'),
+        'interests': interests
+    }
     
     return jsonify(user_data), 200

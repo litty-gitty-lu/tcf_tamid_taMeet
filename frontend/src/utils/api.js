@@ -4,7 +4,7 @@
  */
 
 // Base URL for the backend API
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'http://localhost:5001/api';
 
 /**
  * Get authentication token from localStorage
@@ -36,7 +36,7 @@ export async function apiGet(endpoint) {
     return await response.json();
   } catch (error) {
     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-      throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:5000');
+      throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:5001');
     }
     throw error;
   }
@@ -66,7 +66,7 @@ export async function apiPost(endpoint, data) {
     return await response.json();
   } catch (error) {
     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-      throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:5000');
+      throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:5001');
     }
     throw error;
   }
@@ -96,7 +96,7 @@ export async function apiPut(endpoint, data) {
     return await response.json();
   } catch (error) {
     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-      throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:5000');
+      throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:5001');
     }
     throw error;
   }
@@ -125,7 +125,7 @@ export async function apiDelete(endpoint) {
     return await response.json();
   } catch (error) {
     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-      throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:5000');
+      throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:5001');
     }
     throw error;
   }
