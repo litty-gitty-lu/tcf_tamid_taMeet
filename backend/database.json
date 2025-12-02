@@ -62,6 +62,33 @@
       "bio": "hhhhgh",
       "profile_picture": null,
       "created_at": "2025-12-02T21:45:46.057222"
+    },
+    {
+      "id": 8,
+      "email": "issa.akakaka@kjajaka",
+      "password_hash": "$2b$12$YoUoXLDP2jtM1RcU9TIbseMP5LXGSEhvW967z24Pe2uV6bhILD2oS",
+      "name": "aaaa",
+      "bio": "aaa",
+      "profile_picture": null,
+      "created_at": "2025-12-02T22:09:12.262236"
+    },
+    {
+      "id": 9,
+      "email": "issa.tamid@northeastern.edu",
+      "password_hash": "$2b$12$BqHVOHpkCmh5oSGmPReMeuMd51ttnYXchsBaRg4AQ6r2dXrY38JWu",
+      "name": "issa rada",
+      "bio": "",
+      "profile_picture": null,
+      "created_at": "2025-12-02T22:09:40.320198"
+    },
+    {
+      "id": 10,
+      "email": "radasilva.i@northeastern.edu",
+      "password_hash": "$2b$12$VM3mXci30kY1tRjgI154b.3Bk243iWNH84y3fIxPAUIBLYT29m3oO",
+      "name": "User1234",
+      "bio": "TCF Expo",
+      "profile_picture": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop",
+      "created_at": "2025-12-02T22:09:56.074202"
     }
   ],
   "interests": [
@@ -152,6 +179,26 @@
     {
       "user_id": 7,
       "interest_name": "Finance"
+    },
+    {
+      "user_id": 8,
+      "interest_name": "Leadership"
+    },
+    {
+      "user_id": 10,
+      "interest_name": "Product Management"
+    },
+    {
+      "user_id": 10,
+      "interest_name": "Software Engineering"
+    },
+    {
+      "user_id": 10,
+      "interest_name": "Finance"
+    },
+    {
+      "user_id": 10,
+      "interest_name": "Healthcare"
     }
   ],
   "matches": [
@@ -187,6 +234,39 @@
       "is_active": false,
       "created_at": "2025-12-02T21:45:46.057991",
       "archived_at": "2025-12-02T21:46:24.792292"
+    },
+    {
+      "id": 4,
+      "user1_id": 1,
+      "user2_id": 8,
+      "user1_accepted": true,
+      "user2_accepted": true,
+      "match_score": 95,
+      "is_active": true,
+      "created_at": "2025-12-02T22:09:12.263157",
+      "archived_at": null
+    },
+    {
+      "id": 5,
+      "user1_id": 1,
+      "user2_id": 9,
+      "user1_accepted": true,
+      "user2_accepted": true,
+      "match_score": 95,
+      "is_active": true,
+      "created_at": "2025-12-02T22:09:40.321179",
+      "archived_at": null
+    },
+    {
+      "id": 6,
+      "user1_id": 1,
+      "user2_id": 10,
+      "user1_accepted": true,
+      "user2_accepted": true,
+      "match_score": 95,
+      "is_active": false,
+      "created_at": "2025-12-02T22:09:56.075151",
+      "archived_at": "2025-12-02T22:10:13.261243"
     }
   ],
   "follows": [
@@ -195,6 +275,12 @@
       "follower_id": 7,
       "followed_id": 2,
       "created_at": "2025-12-02T21:46:44.944215"
+    },
+    {
+      "id": 2,
+      "follower_id": 10,
+      "followed_id": 1,
+      "created_at": "2025-12-02T22:11:18.355105"
     }
   ],
   "notes": []

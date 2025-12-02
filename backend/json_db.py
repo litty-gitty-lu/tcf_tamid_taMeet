@@ -1,6 +1,5 @@
 """
-Simple JSON database - stores all data in a JSON file.
-Much simpler than SQLite for development!
+JSON database - stores all data in a JSON file.
 """
 
 import json
@@ -18,7 +17,9 @@ def check_password(password, password_hash):
     """Check if password matches hash"""
     return bcrypt.checkpw(password.encode('utf-8'), password_hash.encode('utf-8'))
 
-DB_FILE = 'database.json'
+# Get absolute path to database.json (in backend directory)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_FILE = os.path.join(BASE_DIR, 'database.json')
 
 def load_db():
     """Load database from JSON file"""

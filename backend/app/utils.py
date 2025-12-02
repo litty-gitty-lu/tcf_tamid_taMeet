@@ -8,8 +8,6 @@ import bcrypt
 from datetime import datetime, timedelta
 from functools import wraps
 from flask import request, jsonify
-from app import db
-from app.models import User
 from config import Config
 
 def hash_password(password):

@@ -1,12 +1,15 @@
 """
 Configuration file for the Flask application.
 This file holds all the settings our app needs to run.
+
+We use a JSON database
 """
 
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+# Load environment variables from .env file (if it exists)
+# This lets you set SECRET_KEY in a .env file instead of hardcoding it
 load_dotenv()
 
 class Config:
@@ -16,13 +19,12 @@ class Config:
     """
     
     # Secret key for signing JWT tokens - must be kept secret!
-    # In production, this should be a long random string
+    # This is used to sign and verify JWT tokens for authentication
+    # In production, this should be a long random string stored in .env file
+    # 
+    # How it works:
+    # - When user logs in, we create a JWT token signed with this key
+    # - When user makes requests, we verify the token using this key
+    # - If someone changes the token, verification will fail
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
-    
-    # Database URL - tells SQLAlchemy where to store the database
-    # SQLite is a simple file-based database, perfect for development
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///tameet.db'
-    
-    # Disable tracking modifications to save resources
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
