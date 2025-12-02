@@ -3,15 +3,15 @@ import '../App.css';
 import { useNavigate } from 'react-router-dom';
 
 
-function SignIn() {
+function SignUp() {
     const navigate = useNavigate();
 
-    const handleSignIn = () => {
+    const handleSignUp = () => {
         navigate('/dashboard');
     };
 
-    const handleGoToSignUp = () => {
-        navigate('/signup');
+    const handleGoToSignIn = () => {
+        navigate('/');
     };
 
     return (
@@ -20,23 +20,24 @@ function SignIn() {
                 <img src={logo} className="App-logo" alt="logo" />
                 <div className="introductory-text">
                     <h1>WELCOME TO TAMEET!</h1>
-                    <h1>SIGN IN TO YOUR ADVENTURE!</h1>
+                    <h1>JOIN YOUR ADVENTURE!</h1>
                 </div>
             </div>
 
             <div className="right-side">
                 <div className="right-content"></div>
                 <div className="title">
-                    <h1>SIGN IN</h1>
-                    <h3>Sign in with email address</h3>
+                    <h1>SIGN UP</h1>
+                    <h3>Create your account</h3>
                 </div>
                 <div className="input-boxes">
+                    <input type="text" placeholder="name" />
                     <input type="text" placeholder="email" />
-                    <input type="text" placeholder="password" />
-                    <button onClick={handleSignIn}>Sign in</button>
+                    <input type="password" placeholder="password" />
+                    <button onClick={handleSignUp}>Sign up</button>
                 </div>
                 <p style={{ color: 'white', marginTop: '20px', fontSize: '14px' }}>
-                    Don't have an account? <span onClick={handleGoToSignUp} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Sign up</span>
+                    Already have an account? <span onClick={handleGoToSignIn} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Sign in</span>
                 </p>
             </div>
 
@@ -44,4 +45,5 @@ function SignIn() {
     );
 }
 
-export default SignIn;
+export default SignUp;
+
