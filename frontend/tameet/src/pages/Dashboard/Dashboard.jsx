@@ -6,8 +6,12 @@ import { useNavigate } from "react-router-dom";
 export default function Dashboard() {
   const navigate = useNavigate();
 
-  const handleGoPages = () => {
+  const handleGoToProfile = () => {
     navigate("/profile");
+  };
+
+  const handleGoToMatch = () => {
+    navigate("/match");
   };
 
 // url for the profile picture
@@ -28,9 +32,9 @@ const tamidUrl =
           <h2>TaMeet</h2>
           <ul>
             {/* creating an unorganized list for the elements in the sidebar*/}
-            <li>Dashboard</li>
-            <li>Match</li>
-            <li onClick={handleGoPages} className="clickable">Profile</li>
+            <li className="active">Dashboard</li>
+            <li onClick={handleGoToMatch} className="clickable">Match</li>
+            <li onClick={handleGoToProfile} className="clickable">Profile</li>
           </ul>
         </aside>
 

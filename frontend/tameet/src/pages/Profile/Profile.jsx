@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
 import "./Profile.css";
+import { useNavigate } from "react-router-dom";
 // import flask
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: "",
-    email: "",
-    bio: "",
-    interests: [],
-    goals: [],
-    activityPreferences: [],
+    name: "Samantha",
+    email: "samantha@northeastern.edu",
+    bio: "Product manager passionate about building innovative tech solutions at the intersection of business and technology. Love connecting with entrepreneurs, developers, and designers to create impactful products. Always excited to discuss startups, product strategy, and career growth!",
+    interests: ["Product Management", "Startups", "Tech", "Business Strategy", "Innovation"],
+    goals: ["Building meaningful connections", "Learning from diverse perspectives", "Career mentorship", "Collaborating on projects"],
+    activityPreferences: ["Coffee", "Lunch", "Virtual"],
     calendarSynced: false,
-    profilePicture: "",
-    following: 0,
-    followers: 0,
+    profilePicture: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop",
+    following: 12,
+    followers: 8,
   });
 
   const [formData, setFormData] = useState({ ...profileData });
@@ -107,8 +109,27 @@ const Profile = () => {
     }
   };
 
+  const handleGoToDashboard = () => {
+    navigate("/dashboard");
+  };
+
+  const handleGoToMatch = () => {
+    navigate("/match");
+  };
+
   return (
-    <div className="profile-container">
+    <div className="profile-page">
+      {/* Sidebar */}
+      <aside className="profile-sidebar">
+        <h2>TaMeet</h2>
+        <ul>
+          <li onClick={handleGoToDashboard} className="clickable">Dashboard</li>
+          <li onClick={handleGoToMatch} className="clickable">Match</li>
+          <li className="active">Profile</li>
+        </ul>
+      </aside>
+
+      <div className="profile-container">
       {/* Profile Header */}
       <div className="profile-header">
         <div className="profile-header-content">
@@ -352,6 +373,7 @@ const Profile = () => {
             )}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

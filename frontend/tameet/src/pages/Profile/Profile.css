@@ -1,8 +1,55 @@
+/* Profile Page Layout */
+.profile-page {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+  background: #0f1115;
+}
+
+/* Profile Sidebar */
+.profile-sidebar {
+  background: #1f2937;
+  color: #fff;
+  padding: 20px;
+}
+
+.profile-sidebar h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.profile-sidebar ul {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+.profile-sidebar li {
+  padding: 8px 0;
+  color: #cbd5e1;
+  cursor: pointer;
+}
+
+.profile-sidebar li:hover {
+  color: #fff;
+}
+
+.profile-sidebar li.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.profile-sidebar li.clickable {
+  cursor: pointer;
+}
+
 /* Profile Container */
 .profile-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
+  background: #f6f8fb;
+  min-height: 100vh;
 }
 
 /* Profile Header */
@@ -393,6 +440,14 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .profile-page {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-sidebar {
+    display: none;
+  }
+
   .profile-header-content {
     grid-template-columns: 1fr;
     text-align: center;

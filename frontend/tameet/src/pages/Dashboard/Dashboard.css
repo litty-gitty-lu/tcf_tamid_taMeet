@@ -49,6 +49,15 @@
   color: #fff; 
 }
 
+.sidebar li.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.sidebar li.clickable {
+  cursor: pointer;
+}
+
 /* main component */
 .main {
   background: #f6f8fb;
