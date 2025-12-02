@@ -2,6 +2,9 @@
 Configuration file for the Flask application.
 This file holds all the settings our app needs to run.
 
+When user logs in, we create a JWT token signed with the key generated, 
+allowing the users profile information to stored
+
 We use a JSON database
 """
 

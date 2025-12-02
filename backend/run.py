@@ -5,7 +5,7 @@ Run this file to start the development server.
 
 from app import create_app
 
-# Create the Flask app
+# Create the Flask application instance in the port 5001
 app = create_app()
 
 if __name__ == '__main__':

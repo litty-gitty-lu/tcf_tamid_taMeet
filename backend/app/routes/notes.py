@@ -1,8 +1,8 @@
 """
 handles all the matching notes from the users, it is like a journal where 
 you can keep notes of the people, as these notes are private to each user. 
-Has a get request to get the match id and get the current match
-has a post request to post a change to the match note / edit it 
+Has a get request to get the match id and get the current match note
+has a post request to create to the match note / edit it 
 has a delete request to delete a match note
 """
 

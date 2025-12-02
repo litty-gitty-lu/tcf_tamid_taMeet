@@ -1,6 +1,12 @@
 """
 Profile that handles user profile operations.
 Uses JSON database.
+For profile, we have different types of api calls
+There's a get request that gets the users profile
+    returning the json objectn with the users data
+There's a put method to update the profile, puts the new information
+There's a post request to create a new profile, creating a competely new profile
+# special endpoint for new users completing registration
 """
 
 from flask import Blueprint, request, jsonify
