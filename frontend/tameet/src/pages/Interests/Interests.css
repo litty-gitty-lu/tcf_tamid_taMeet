@@ -1,0 +1,154 @@
+/* Interests page with light blue background */
+.interests-page {
+  min-height: 100vh;
+  background: #e0f2fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.interests-container {
+  max-width: 900px;
+  width: 100%;
+}
+
+.interests-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.interests-header h1 {
+  margin: 0 0 8px 0;
+  font-size: 36px;
+  font-weight: 700;
+  color: #1e40af;
+}
+
+.interests-header p {
+  margin: 0;
+  font-size: 18px;
+  color: #475569;
+}
+
+.interests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.interest-bubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 20px;
+  background: #fff;
+  border: 2px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.interest-bubble:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: #071739;
+}
+
+.interest-bubble.selected {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+.interest-bubble.selected:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.interest-name {
+  text-align: center;
+}
+
+.interests-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-skip,
+.btn-continue {
+  padding: 14px 32px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 180px;
+}
+
+.btn-skip {
+  background: #94a3b8;
+  color: #fff;
+  border: 2px solid #94a3b8;
+}
+
+.btn-skip:hover {
+  background: #64748b;
+  border-color: #64748b;
+}
+
+.btn-continue {
+  background: #3b82f6;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-continue:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.btn-continue:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .interests-header h1 {
+    font-size: 28px;
+  }
+
+  .interests-header p {
+    font-size: 16px;
+  }
+
+  .interests-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .interest-bubble {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .interests-actions {
+    flex-direction: column;
+  }
+
+  .btn-skip,
+  .btn-continue {
+    width: 100%;
+  }
+}
+

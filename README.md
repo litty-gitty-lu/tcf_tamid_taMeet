@@ -1,5 +1,61 @@
-# tcf_BeyondCoffee
-We will be designing and implementing **BeyondCoffee**, an app with the purpose of reimagining traditional "coffee chats" by matching users based on their goals and preferences. **BeyondCoffee** allows users to input short introductions, their interests, and ideas for the activities. Users are also allowed to sync their calendars to automatically schedule the chats according to their availability. The app utilizes AI and algorithms to evaluate user preferences and match them with others respectively, establishing a time and date to meet and a proposed activity. Users will have their own profiles, with passwords to authenticate them, and will be able to connect and interact (request to follow, dm, etc.) with other users of the app.
+# TaMeet
 
-# team members
-Luana Case, Rishi Koduri, Valentina Benitez, Vibhu Gangina, and Issa Rada
+Simple matching app for TAMID members.
+
+## How to Run
+
+### 1. Start Backend (Terminal 1)
+
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python run.py
+```
+
+Wait until you see: `Running on http://0.0.0.0:5000`
+
+### 2. Start Frontend (Terminal 2 - NEW TERMINAL)
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Browser will open to `http://localhost:3000`
+
+### 3. Create Account
+
+1. Go to `http://localhost:3000`
+2. Click "Sign up"
+3. Enter name, email, password
+4. Click "Sign up"
+5. Complete onboarding
+
+## Project Structure
+
+```
+tcf_tamid_taMeet/
+├── frontend/          # React app
+│   ├── src/
+│   │   ├── pages/     # All pages
+│   │   ├── utils/     # API functions
+│   │   ├── App.js     # Main app
+│   │   └── index.js   # Entry point
+│   └── public/        # Images, etc.
+├── backend/           # Flask API
+│   ├── app/
+│   │   ├── routes/    # API endpoints
+│   │   ├── models.py  # Database
+│   │   └── utils.py   # Helpers
+│   └── run.py         # Start server
+└── extra/             # Extra docs (ignore)
+```
+
+## That's It!
+
+Both servers must be running at the same time:
+- Backend: `http://localhost:5000`
+- Frontend: `http://localhost:3000`

@@ -1,0 +1,18 @@
+# Flask - web framework for creating API endpoints
+Flask==3.0.0
+
+# Flask-SQLAlchemy - makes it easy to work with databases
+flask-sqlalchemy==3.1.1
+
+# Flask-CORS - allows React frontend to talk to Flask backend
+flask-cors==4.0.0
+
+# JWT - for creating secure authentication tokens
+PyJWT==2.8.0
+
+# bcrypt - for securely hashing passwords
+bcrypt==4.1.2
+
+# python-dotenv - for loading environment variables from .env file
+python-dotenv==1.0.0
+
