@@ -90,6 +90,10 @@ def delete_match_note(match_id):
         user_id=current_user.id
     ).first()
     
+    # Check if note exists
+    if not note:
+        return jsonify({'error': 'Note not found'}), 404
+    
     # Delete the note
     db.session.delete(note)
     db.session.commit()

@@ -68,8 +68,8 @@ def login():
     # Find user by email
     user = User.query.filter_by(email=email).first()
     
-    # Check password - verify it matches
-    if not check_password(password, user.password_hash):
+    # Check if user exists and password matches
+    if not user or not check_password(password, user.password_hash):
         return jsonify({'error': 'Invalid email or password'}), 401
     
     # Generate token

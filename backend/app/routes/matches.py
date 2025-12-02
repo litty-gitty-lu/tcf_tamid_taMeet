@@ -8,6 +8,7 @@ from app import db
 from app.models import User, Match
 from app.utils import require_auth
 from sqlalchemy import and_, or_
+from datetime import datetime
 
 # Create a blueprint for match routes
 bp = Blueprint('matches', __name__)
@@ -74,6 +75,10 @@ def find_match():
     
     # Filter out users we've already matched with
     available_users = [user for user in all_users if user.id not in matched_user_ids]
+    
+    # Check if there are any available users
+    if not available_users:
+        return jsonify({'error': 'No available users to match with'}), 404
     
     # Find the best match based on interests
     best_match = None
@@ -209,9 +214,12 @@ def archive_match():
     # Find the match
     match = Match.query.get(match_id)
     
+    # Check if match exists
+    if not match:
+        return jsonify({'error': 'Match not found'}), 404
+    
     # Archive it
     match.is_active = False
-    from datetime import datetime
     match.archived_at = datetime.utcnow()
     
     # Save changes
@@ -254,7 +262,7 @@ def get_past_matches():
         # Add match data
         match_data = other_user.to_dict()
         match_data['match_id'] = match.id
-        match_data['archived_date'] = match.archived_at.isoformat()
+        match_data['archived_date'] = match.archived_at.isoformat() if match.archived_at else None
         matches_list.append(match_data)
     
     return jsonify(matches_list), 200

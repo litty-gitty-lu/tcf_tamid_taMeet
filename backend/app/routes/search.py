@@ -137,6 +137,10 @@ def get_user_profile(user_id):
     # Get the user
     user = User.query.get(user_id)
     
+    # Check if user exists
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    
     # Get user data
     user_data = user.to_dict()
     
